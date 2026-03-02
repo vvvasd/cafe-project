@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Кафешка</title>
+</head>
+<body>
+<h1>Меню</h1>
+<div id="menu"></div>
+
+<script>
+fetch("/api/menu")
+.then(r => r.json())
+.then(data => {
+    const div = document.getElementById("menu");
+    data.forEach(item => {
+        const btn = document.createElement("button");
+        btn.innerText = item.name + " - " + item.price + "₽";
+        btn.onclick = () => order(item);
+        div.appendChild(btn);
+        div.appendChild(document.createElement("br"));
+    });
+});
+
+function order(item){
+    fetch("/api/order",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(item)
+    }).then(r=>r.json()).then(alert);
+}
+</script>
+
+</body>
+</html>
